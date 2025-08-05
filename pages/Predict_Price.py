@@ -22,17 +22,17 @@ cols1, cols2 = st.columns([2,1])
 with cols1:
 
     # Load all models & files
-    model = joblib.load("xgb_home_price_model.pkl")
-    features = joblib.load("model_features.pkl")
-    top_100_expensive_cities = joblib.load("top_100_expensive_cities.pkl")
-    top_100_cheap_cities = joblib.load("top_100_cheap_cities.pkl")
-    top_20_famous_cities = joblib.load("top_20_famous_cities.pkl")
-    living_area_thresh = joblib.load("living_area_thresh.pkl")
-    room_thresh = joblib.load("room_thresh.pkl")
-    small_area_thresh = joblib.load("small_area_thresh.pkl")
-    kmeans = joblib.load("location_kmeans.pkl")
-    density_thresh = joblib.load("room_density_thresh.pkl")
-    cheap_volume_cities = joblib.load("cheap_high_volume_cities.pkl")
+    model = joblib.load("pkl/xgb_home_price_model.pkl")
+    features = joblib.load("pkl/model_features.pkl")
+    top_100_expensive_cities = joblib.load("pkl/top_100_expensive_cities.pkl")
+    top_100_cheap_cities = joblib.load("pkl/top_100_cheap_cities.pkl")
+    top_20_famous_cities = joblib.load("pkl/top_20_famous_cities.pkl")
+    living_area_thresh = joblib.load("pkl/living_area_thresh.pkl")
+    room_thresh = joblib.load("pkl/room_thresh.pkl")
+    small_area_thresh = joblib.load("pkl/small_area_thresh.pkl")
+    kmeans = joblib.load("pkl/location_kmeans.pkl")
+    density_thresh = joblib.load("pkl/room_density_thresh.pkl")
+    cheap_volume_cities = joblib.load("pkl/cheap_high_volume_cities.pkl")
 
     # Safe geocoder
     def safe_geocode(geolocator, address, max_retries=3):
@@ -177,8 +177,9 @@ with cols1:
         upper_bound = price * (1 + mape)
 
         st.subheader(f"Predicted Price: **${price:,.0f}**")
-        st.markdown(f"Estimated Range: **${lower_bound:,.0f} - ${upper_bound:,.0f}**")
-
+        st.markdown("#### Estimated Price Range")
+        st.markdown(f"**Upper Range:** ${upper_bound:,.0f}")
+        st.markdown(f"**Lower Range:** ${lower_bound:,.0f}")
         # SHAP explainer + plot
         explainer = shap.Explainer(model)
         shap_values = explainer(input_df)
@@ -222,4 +223,5 @@ with cols1:
 
 with cols2:
     st.image("https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=800&q=80", use_container_width=True)
+    
     
