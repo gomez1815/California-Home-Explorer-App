@@ -5,10 +5,10 @@ import numpy as np
 import joblib
 import matplotlib.pyplot as plt
 
-model = joblib.load("xgb_home_price_model.pkl")
-X_test = joblib.load("X_test.pkl")
-y_test = joblib.load("y_test.pkl")
-shap_values = joblib.load("shap_values.pkl")
+model = joblib.load("pkl/xgb_home_price_model.pkl")
+X_test = joblib.load("pkl/X_test.pkl")
+y_test = joblib.load("pkl/y_test.pkl")
+shap_values = joblib.load("pkl/shap_values.pkl")
 
 preds = model.predict(X_test)
 
