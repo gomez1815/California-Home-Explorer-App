@@ -1,8 +1,10 @@
 streamlit
 pandas
-plotly
-fpdf
-matplotlib
 numpy
+matplotlib
+plotly
 geopy
 joblib
+xgboost
+fpdf
+
