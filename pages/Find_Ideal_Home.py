@@ -3,9 +3,18 @@
 import streamlit as st
 import pandas as pd
 from background import set_background
+import os
 
-final_df = pd.read_csv("final_df.csv")
+# Path to your chunked CSVs
+data_dir = "data_chunks"
 
+# Combine all chunks
+def load_split_csvs(folder):
+    csv_files = sorted([f for f in os.listdir(folder) if f.endswith(".csv")])
+    df_list = [pd.read_csv(os.path.join(folder, f)) for f in csv_files]
+    return pd.concat(df_list, ignore_index=True)
+
+final_df = load_split_csvs(data_dir)
 
 st.title("Find Your Ideal Home")
 
@@ -52,7 +61,7 @@ with col1:
                 })
 
                 st.markdown(f"### Top {top_n} Most Ideal Home{'s' if top_n > 1 else ''} Location")
-                st.map(map_df[['latitude', 'longitude']], zoom=11)
+                st.map(map_df[['latitude', 'longitude']], zoom=4)
             else:
                 st.warning("No matching homes found.")
 
