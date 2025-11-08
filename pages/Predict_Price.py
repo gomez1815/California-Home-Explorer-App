@@ -181,32 +181,21 @@ with cols1:
         st.markdown(f"**Upper Range:** ${upper_bound:,.0f}")
         st.markdown(f"**Lower Range:** ${lower_bound:,.0f}")
         # SHAP explainer + plot
-    try:
-        explainer = shap.TreeExplainer(model)
-    except Exception:
-        masker = shap.maskers.Independent(input_df)  # background drawn from the row(s) you’re explaining
-        predict_fn = getattr(model, "predict", None)
-        if callable(predict_fn):
-            explainer = shap.Explainer(predict_fn, masker)
-        else:
-            predict_proba = getattr(model, "predict_proba", None)
-            if callable(predict_proba):
-                explainer = shap.Explainer(lambda X: predict_proba(X)[:, 1], masker)
+        try:
+            explainer = shap.TreeExplainer(model)
+        except Exception:
+            masker = shap.maskers.Independent(input_df)  # background drawn from the row(s) you’re explaining
+            predict_fn = getattr(model, "predict", None)
+            if callable(predict_fn):
+                explainer = shap.Explainer(predict_fn, masker)
             else:
-                st.error("Model has no predict/predict_proba; cannot build SHAP explainer.")
-                st.stop()
-    # Compute SHAP value
-    shap_values = explainer(input_df)
-
-    # Waterfall (single prediction)
-    fig, ax = plt.subplots(figsize=(10, 4))
-    shap.plots.waterfall(shap_values[0], show=False)
-    st.pyplot(fig, clear_figure=True)
-
-    # Save plot to buffer for download
-    buf = io.BytesIO()
-    fig.savefig(buf, format="png", bbox_inches="tight")
-    buf.seek(0)
+                predict_proba = getattr(model, "predict_proba", None)
+                if callable(predict_proba):
+                    explainer = shap.Explainer(lambda X: predict_proba(X)[:, 1], masker)
+                else:
+                    st.error("Model has no predict/predict_proba; cannot build SHAP explainer.")
+                    st.stop()
+    
 
         shap_values = explainer(input_df)
         fig, ax = plt.subplots(figsize=(10, 4))
@@ -251,4 +240,5 @@ with cols2:
     st.image("https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=800&q=80", use_container_width=True)
     
     
+
 
